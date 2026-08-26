@@ -1,12 +1,13 @@
 # p2computing.com
 
 The P2 Computing site — a retro sci-fi / synthwave space-station console,
-served as a static site from GitHub Pages at https://p2computing.com.
+served from the estate at https://p2computing.com.
 
 ## Stack
 
-Plain HTML/CSS/JS, no build step. `index.html` is the console, `404.html`
-is the signal-lost page, `CNAME` binds the custom domain.
+Plain HTML/CSS/JS, no build step. `index.html` is the console and `404.html`
+is the signal-lost page. Hosting, TLS and how to publish a change are in
+[DEPLOY.md](DEPLOY.md).
 
 ## Palette
 
