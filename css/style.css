@@ -1,6 +1,7 @@
 /* ── P2 Computing — orbital console ─────────────────────────────
    Palette (fixed): void #000, deep #3b0855, plum #852467,
-   salmon #FD8083, pink #EE227D, steel #498099, teal #30C0B7   */
+   salmon #FD8083, pink #EE227D, steel #498099, teal #30C0B7
+   Motion rule: slow breathes and sweeps only. Nothing strobes.  */
 
 :root {
   --void:   #000000;
@@ -13,6 +14,7 @@
 
   --panel-bg: rgba(59, 8, 85, 0.22);
   --panel-edge: rgba(133, 36, 103, 0.85);
+  --bezel: rgba(73, 128, 153, 0.35);
   --text: var(--teal);
   --cut: 14px;
 }
@@ -26,8 +28,8 @@ body {
   color: var(--text);
   font-family: "Share Tech Mono", ui-monospace, Consolas, monospace;
   background:
-    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(59,8,85,.75), transparent 60%),
-    radial-gradient(ellipse 90% 60% at 85% 110%, rgba(73,128,153,.28), transparent 65%),
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(59,8,85,.8), transparent 60%),
+    radial-gradient(ellipse 90% 60% at 85% 110%, rgba(73,128,153,.3), transparent 65%),
     var(--void);
   overflow-x: hidden;
 }
@@ -36,9 +38,7 @@ body {
 
 /* ── backdrop: stars + CRT texture (static, nothing strobes) ── */
 
-.stars, .crt {
-  position: fixed; inset: 0; pointer-events: none;
-}
+.stars, .crt { position: fixed; inset: 0; pointer-events: none; }
 
 .stars {
   z-index: -1;
@@ -65,22 +65,43 @@ body {
   z-index: 40;
   background:
     repeating-linear-gradient(0deg,
-      rgba(0,0,0,.16) 0px, rgba(0,0,0,.16) 1px,
+      rgba(0,0,0,.15) 0px, rgba(0,0,0,.15) 1px,
       transparent 1px, transparent 3px),
     radial-gradient(ellipse 140% 140% at 50% 50%,
       transparent 60%, rgba(0,0,0,.55) 100%);
 }
 
+/* ── neon strip lights (the edge tubes in every good cockpit) ── */
+
+.strip {
+  height: 3px;
+  border-radius: 3px;
+}
+
+.strip-pink {
+  background: linear-gradient(90deg, transparent, var(--pink) 12%, var(--salmon) 50%, var(--pink) 88%, transparent);
+  box-shadow: 0 0 8px var(--pink), 0 0 22px rgba(238,34,125,.7), 0 0 48px rgba(238,34,125,.4);
+}
+
+.strip-teal {
+  background: linear-gradient(90deg, transparent, var(--teal) 12%, var(--steel) 50%, var(--teal) 88%, transparent);
+  box-shadow: 0 0 8px var(--teal), 0 0 22px rgba(48,192,183,.6), 0 0 48px rgba(48,192,183,.35);
+}
+
 /* ── masthead ── */
 
 .masthead {
+  margin: 1.2rem clamp(.8rem, 3vw, 2.5rem) 0;
+  padding: .7rem 1.3rem .9rem;
+  position: relative;
   display: flex; align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: .5rem 1.5rem;
-  margin: 1.2rem clamp(.8rem, 3vw, 2.5rem) 0;
-  padding: .7rem 1.3rem;
   border: 1px solid var(--panel-edge);
   background: linear-gradient(90deg, rgba(59,8,85,.55), rgba(0,0,0,.6) 55%, rgba(73,128,153,.25));
+  clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 100%, 0 100%);
 }
+
+.masthead .strip { position: absolute; left: 6%; right: 6%; bottom: 0; }
 
 .mast-left { display: flex; align-items: center; gap: .8rem; }
 
@@ -113,7 +134,7 @@ body {
 
 @media (max-width: 480px) {
   .logo { letter-spacing: .08em; font-size: 1.15rem; }
-  .masthead { padding: .7rem .8rem; }
+  .masthead { padding: .7rem .8rem .9rem; }
 }
 
 .mast-right { font-size: .85rem; color: var(--steel); letter-spacing: .08em; }
@@ -131,13 +152,18 @@ body {
 }
 
 .span2 { grid-column: span 2; }
+.full  { grid-column: 1 / -1; }
 @media (max-width: 720px) { .span2 { grid-column: span 1; } }
 
 .panel {
+  position: relative;
   border: 1px solid var(--panel-edge);
+  outline: 1px solid rgba(73,128,153,.18);
+  outline-offset: 3px;
   background: linear-gradient(160deg, var(--panel-bg), rgba(0,0,0,.72) 70%);
   box-shadow:
     inset 0 0 24px rgba(59,8,85,.5),
+    inset 0 1px 0 rgba(255,255,255,.06),
     0 0 14px rgba(133,36,103,.35);
   display: flex; flex-direction: column;
   min-height: 220px;
@@ -165,6 +191,129 @@ body {
 .band-steel  { background: linear-gradient(90deg, var(--steel), rgba(73,128,153,.15)); color: #fff; }
 .band-salmon { background: linear-gradient(90deg, var(--salmon), rgba(253,128,131,.15)); }
 .band-plum   { background: linear-gradient(90deg, var(--plum), rgba(133,36,103,.15)); color: #fff; }
+
+/* corner screws — panel hardware */
+.screw {
+  position: absolute;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.5), var(--steel) 40%, #10222b 90%);
+  box-shadow: 0 0 4px rgba(0,0,0,.8);
+}
+.s-tl { top: 7px; left: 7px; }   .s-tr { top: 7px; right: 7px; }
+.s-bl { bottom: 7px; left: 7px; } .s-br { bottom: 7px; right: 7px; }
+
+/* ── forward viewport ─────────────────────────────────────── */
+
+.viewport-panel {
+  min-height: 0;
+  border: none; outline: none; box-shadow: none; background: none;
+}
+
+.vp-frame {
+  position: relative;
+  border: 1px solid var(--panel-edge);
+  outline: 1px solid rgba(73,128,153,.18);
+  outline-offset: 3px;
+  background: linear-gradient(160deg, rgba(59,8,85,.5), rgba(0,0,0,.8));
+  padding: 12px;
+  clip-path: polygon(
+    40px 0, calc(100% - 40px) 0, 100% 30%,
+    100% 70%, calc(100% - 40px) 100%, 40px 100%,
+    0 70%, 0 30%);
+  box-shadow:
+    inset 0 0 30px rgba(59,8,85,.7),
+    0 0 18px rgba(133,36,103,.4);
+}
+
+.vp-scene {
+  position: relative;
+  height: clamp(200px, 32vw, 320px);
+  overflow: hidden;
+  clip-path: polygon(
+    32px 0, calc(100% - 32px) 0, 100% 30%,
+    100% 70%, calc(100% - 32px) 100%, 32px 100%,
+    0 70%, 0 30%);
+  background: #000;
+}
+
+.vp-sky {
+  position: absolute; inset: 0 0 34% 0;
+  background:
+    radial-gradient(1px 1px at 18% 30%, rgba(255,255,255,.8), transparent 100%),
+    radial-gradient(1px 1px at 72% 18%, rgba(253,128,131,.9), transparent 100%),
+    radial-gradient(1.5px 1.5px at 88% 42%, rgba(48,192,183,.8), transparent 100%),
+    radial-gradient(1px 1px at 40% 12%, rgba(255,255,255,.6), transparent 100%),
+    radial-gradient(1px 1px at 60% 50%, rgba(238,34,125,.7), transparent 100%),
+    linear-gradient(180deg, #000 0%, var(--deep) 60%, var(--plum) 100%);
+}
+
+/* the sun: banded, glowing, sitting on the horizon */
+.vp-sun {
+  position: absolute;
+  left: 50%; bottom: 30%;
+  width: clamp(120px, 22vw, 200px);
+  height: clamp(120px, 22vw, 200px);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--salmon) 0%, var(--pink) 55%, var(--plum) 100%);
+  -webkit-mask-image: linear-gradient(180deg,
+    #000 0 55%,
+    transparent 55% 58%, #000 58% 66%,
+    transparent 66% 70%, #000 70% 79%,
+    transparent 79% 84%, #000 84% 100%);
+  mask-image: linear-gradient(180deg,
+    #000 0 55%,
+    transparent 55% 58%, #000 58% 66%,
+    transparent 66% 70%, #000 70% 79%,
+    transparent 79% 84%, #000 84% 100%);
+  filter: drop-shadow(0 0 24px rgba(238,34,125,.75)) drop-shadow(0 0 60px rgba(238,34,125,.4));
+}
+
+.vp-haze {
+  position: absolute; left: 0; right: 0; bottom: 30%; height: 26%;
+  background: linear-gradient(180deg, transparent, rgba(238,34,125,.28));
+}
+
+/* perspective grid floor, conveyor-scrolling toward the viewer */
+.vp-grid {
+  position: absolute;
+  left: -25%; right: -25%; bottom: -4%;
+  height: 38%;
+  transform: perspective(300px) rotateX(60deg);
+  transform-origin: 50% 0;
+  background-image:
+    linear-gradient(90deg, rgba(48,192,183,.55) 1.5px, transparent 1.5px),
+    linear-gradient(0deg,  rgba(48,192,183,.55) 1.5px, transparent 1.5px),
+    linear-gradient(180deg, var(--deep), #000 85%);
+  background-size: 48px 44px, 48px 44px, 100% 100%;
+  animation: gridRoll 3.2s linear infinite;
+  box-shadow: 0 0 30px rgba(48,192,183,.25) inset;
+}
+
+@keyframes gridRoll {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to   { background-position: 0 44px, 0 44px, 0 0; }
+}
+
+/* glass: reflection + slight tint, no motion */
+.vp-glass {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(115deg, transparent 42%, rgba(255,255,255,.05) 46%, transparent 52%),
+    radial-gradient(ellipse 160% 120% at 50% 120%, transparent 65%, rgba(0,0,0,.5) 100%);
+}
+
+.vp-tag {
+  position: absolute;
+  left: 50%; bottom: 20px; transform: translateX(-50%);
+  padding: .2rem .9rem;
+  font-size: .7rem; letter-spacing: .25em;
+  color: var(--teal);
+  background: rgba(0,0,0,.75);
+  border: 1px solid rgba(48,192,183,.5);
+  text-shadow: 0 0 6px rgba(48,192,183,.8);
+  white-space: nowrap;
+}
 
 /* ── main terminal ── */
 
@@ -276,9 +425,33 @@ body {
 
 /* ── telemetry ── */
 
+.tele-row {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .8rem 1rem 0;
+}
+
+.dial {
+  width: 92px; flex: none;
+  filter: drop-shadow(0 0 8px rgba(238,34,125,.3));
+  font-family: "Share Tech Mono", monospace;
+}
+
+/* the needle wanders slowly around the face */
+.needle {
+  transform-origin: 50px 50px;
+  transform: rotate(-40deg);
+  animation: needleWander 11s ease-in-out infinite;
+}
+@keyframes needleWander {
+  0%   { transform: rotate(-42deg); }
+  30%  { transform: rotate(12deg); }
+  55%  { transform: rotate(-15deg); }
+  80%  { transform: rotate(30deg); }
+  100% { transform: rotate(-42deg); }
+}
+
 .wave {
-  width: 100%; height: 90px;
-  margin-top: .8rem;
+  flex: 1; min-width: 0; height: 90px;
   filter: drop-shadow(0 0 6px rgba(48,192,183,.5));
 }
 
@@ -343,11 +516,102 @@ body {
   50%      { opacity: .15; }
 }
 
+/* ── control bank ─────────────────────────────────────────── */
+
+.bank {
+  display: flex; align-items: stretch; gap: 1.4rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.2rem 1.2rem;
+}
+
+.keybank {
+  flex: 1 1 260px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+  gap: 7px;
+  align-content: start;
+}
+
+.key {
+  height: 26px;
+  border: 1px solid rgba(73,128,153,.5);
+  border-radius: 3px;
+  background: rgba(0,0,0,.65);
+  color: var(--kc, var(--teal));
+  cursor: pointer;
+  transition: box-shadow .3s ease, background .3s ease;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,.6);
+}
+
+.key.on {
+  background: var(--kc, var(--teal));
+  box-shadow:
+    0 0 8px var(--kc, var(--teal)),
+    0 0 20px var(--kc, var(--teal)),
+    inset 0 -3px 0 rgba(0,0,0,.25);
+}
+
+.key:focus-visible { outline: 2px solid var(--salmon); outline-offset: 2px; }
+
+.faders { display: flex; gap: 1.1rem; align-items: center; padding: 0 .4rem; }
+
+.fader {
+  position: relative;
+  width: 8px; height: 110px;
+  background: rgba(0,0,0,.7);
+  border: 1px solid rgba(73,128,153,.5);
+  border-radius: 4px;
+}
+
+.fknob {
+  position: absolute;
+  left: 50%; top: var(--y);
+  transform: translate(-50%, -50%);
+  width: 26px; height: 12px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, rgba(255,255,255,.25), transparent 40%), var(--teal);
+  box-shadow: 0 0 8px var(--teal);
+}
+.fk-pink   { background-color: var(--pink);   box-shadow: 0 0 8px var(--pink); }
+.fk-salmon { background-color: var(--salmon); box-shadow: 0 0 8px var(--salmon); }
+
+.master {
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  justify-content: center;
+}
+
+.master-btn {
+  position: relative;
+  padding: 1rem 1.4rem .8rem;
+  font-size: .78rem; letter-spacing: .25em;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(238,34,125,.35), rgba(0,0,0,.75));
+  border: 1px solid var(--pink);
+  cursor: pointer;
+  text-shadow: 0 0 6px var(--pink);
+  box-shadow: 0 0 10px rgba(238,34,125,.4), inset 0 0 12px rgba(238,34,125,.25);
+  clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 100%, 0 100%);
+}
+
+/* the guard cover: a striped flap over the top half */
+.master-cap {
+  position: absolute; inset: 0 0 55% 0;
+  background: repeating-linear-gradient(-45deg,
+    rgba(238,34,125,.8) 0 10px, rgba(0,0,0,.85) 10px 20px);
+  border-bottom: 1px solid var(--pink);
+  pointer-events: none;
+}
+
+.master-note { font-size: .62rem; letter-spacing: .3em; color: var(--plum); }
+
 /* ── footer ── */
 
-footer {
+footer { padding: 0 clamp(.8rem, 3vw, 2.5rem) 1.4rem; }
+
+footer .strip { margin-bottom: .8rem; }
+
+.foot-row {
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: .4rem 1.5rem;
-  padding: .8rem clamp(.8rem, 3vw, 2.5rem) 1.4rem;
   font-size: .72rem;
   letter-spacing: .18em;
   color: var(--plum);
@@ -362,5 +626,5 @@ footer {
 /* ── motion safety: everything stills, nothing lost ── */
 
 @media (prefers-reduced-motion: reduce) {
-  .stars, .sweep, .blip, .led, .cursor { animation: none; }
+  .stars, .sweep, .blip, .led, .cursor, .vp-grid, .needle { animation: none; }
 }

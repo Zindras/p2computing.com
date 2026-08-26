@@ -197,4 +197,32 @@
 
   addComms(); addComms(); addComms();
   setInterval(addComms, 7000);
+
+  /* ── control bank: lit keys + the guarded switch ────────── */
+
+  var KEY_COLORS = ["#30C0B7", "#EE227D", "#FD8083", "#498099", "#852467"];
+  var keybank = $("keybank");
+  var KEY_COUNT = 36;
+  /* deterministic "random": same board every visit */
+  function lit(i) { return ((i * 2654435761) >>> 16) % 5 < 2; }
+
+  for (var k = 0; k < KEY_COUNT; k++) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "key" + (lit(k) ? " on" : "");
+    b.style.setProperty("--kc", KEY_COLORS[k % KEY_COLORS.length]);
+    b.setAttribute("aria-label", "Toggle K" + pad(k + 1));
+    b.setAttribute("aria-pressed", lit(k) ? "true" : "false");
+    b.addEventListener("click", function () {
+      var on = this.classList.toggle("on");
+      this.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    keybank.appendChild(b);
+  }
+
+  $("master").addEventListener("click", function () {
+    appendLine("sys", "> JETTISON");
+    appendLine("err", "REFUSED. NOTHING ABOARD TO JETTISON,");
+    appendLine("err", "AND THE GUARD COVER IS BOLTED SHUT.");
+  });
 })();

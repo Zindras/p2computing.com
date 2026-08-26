@@ -16,7 +16,7 @@
 <div class="stars" aria-hidden="true"></div>
 <div class="crt" aria-hidden="true"></div>
 
-<header class="masthead panel-cut">
+<header class="masthead">
   <div class="mast-left">
     <span class="led" aria-hidden="true"></span>
     <h1 class="logo">P2<span class="logo-sep">//</span>COMPUTING</h1>
@@ -28,9 +28,26 @@
     <span class="mast-div">|</span>
     <span class="ok">LINK OK</span>
   </div>
+  <div class="strip strip-pink" aria-hidden="true"></div>
 </header>
 
 <main class="deck">
+
+  <!-- forward viewport: synthwave sun over the grid -->
+  <section class="panel full viewport-panel" aria-label="Forward viewport">
+    <div class="vp-frame">
+      <div class="vp-scene" aria-hidden="true">
+        <div class="vp-sky"></div>
+        <div class="vp-sun"></div>
+        <div class="vp-haze"></div>
+        <div class="vp-grid"></div>
+        <div class="vp-glass"></div>
+      </div>
+      <div class="vp-tag mono">FWD VIEWPORT &middot; SECTOR 7G &middot; MAG 1.0</div>
+      <span class="screw s-tl" aria-hidden="true"></span><span class="screw s-tr" aria-hidden="true"></span>
+      <span class="screw s-bl" aria-hidden="true"></span><span class="screw s-br" aria-hidden="true"></span>
+    </div>
+  </section>
 
   <section class="panel panel-cut span2" id="boot-panel" aria-label="Main terminal">
     <h2 class="band band-teal">MU/9000 &mdash; MAIN TERMINAL</h2>
@@ -84,12 +101,28 @@
 
   <section class="panel panel-cut" aria-label="Telemetry">
     <h2 class="band band-salmon">TELEMETRY</h2>
-    <svg class="wave" viewBox="0 0 300 80" preserveAspectRatio="none" role="img" aria-label="Signal waveform">
-      <path id="wavepath" fill="none" stroke="#30C0B7" stroke-width="2"
-            d="M0,40 L300,40"/>
-      <path id="wavepath2" fill="none" stroke="#EE227D" stroke-width="1" stroke-opacity=".6"
-            d="M0,40 L300,40"/>
-    </svg>
+    <div class="tele-row">
+      <svg class="dial" viewBox="0 0 100 100" role="img" aria-label="Reactor output dial">
+        <circle cx="50" cy="50" r="46" fill="rgba(0,0,0,.55)" stroke="#498099" stroke-width="1.5"/>
+        <g class="ticks" stroke="#498099" stroke-width="2">
+          <line x1="50" y1="8" x2="50" y2="16"/>
+          <line x1="14" y1="71" x2="21" y2="67"/>
+          <line x1="86" y1="71" x2="79" y2="67"/>
+          <line x1="20" y1="29" x2="26" y2="34"/>
+          <line x1="80" y1="29" x2="74" y2="34"/>
+        </g>
+        <path d="M26,80 A38,38 0 0 1 20,66" fill="none" stroke="#EE227D" stroke-width="4"/>
+        <g class="needle">
+          <line x1="50" y1="50" x2="50" y2="14" stroke="#FD8083" stroke-width="2.5"/>
+        </g>
+        <circle cx="50" cy="50" r="4" fill="#EE227D"/>
+        <text x="50" y="92" text-anchor="middle" fill="#498099" font-size="9" font-family="inherit">OUTPUT</text>
+      </svg>
+      <svg class="wave" viewBox="0 0 300 80" preserveAspectRatio="none" role="img" aria-label="Signal waveform">
+        <path id="wavepath" fill="none" stroke="#30C0B7" stroke-width="2" d="M0,40 L300,40"/>
+        <path id="wavepath2" fill="none" stroke="#EE227D" stroke-width="1" stroke-opacity=".6" d="M0,40 L300,40"/>
+      </svg>
+    </div>
     <div class="tele mono">
       <span>CORE <b id="t-core" class="ok">641K</b></span>
       <span>FLUX <b id="t-flux" class="warn">1.21</b></span>
@@ -112,11 +145,34 @@
     </div>
   </section>
 
+  <!-- control bank: rows of lit keys, sliders, one guarded switch -->
+  <section class="panel panel-cut full" aria-label="Control bank">
+    <h2 class="band band-steel">CONTROL BANK B</h2>
+    <div class="bank">
+      <div id="keybank" class="keybank" role="group" aria-label="Toggle keys"></div>
+      <div class="faders" aria-hidden="true">
+        <div class="fader"><span class="fknob" style="--y:18%"></span></div>
+        <div class="fader"><span class="fknob fk-pink" style="--y:52%"></span></div>
+        <div class="fader"><span class="fknob fk-salmon" style="--y:34%"></span></div>
+      </div>
+      <div class="master">
+        <button id="master" class="master-btn mono" type="button">
+          <span class="master-cap" aria-hidden="true"></span>
+          JETTISON
+        </button>
+        <span class="master-note mono">GUARDED</span>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="mono">
-  <span>P2 COMPUTING &middot; DEEP ORBIT FACILITY</span>
-  <span class="dim">MU/9000 REV 2.6 &middot; ALL SYSTEMS MONITORED</span>
+  <div class="strip strip-teal" aria-hidden="true"></div>
+  <div class="foot-row">
+    <span>P2 COMPUTING &middot; DEEP ORBIT FACILITY</span>
+    <span class="dim">MU/9000 REV 2.6 &middot; ALL SYSTEMS MONITORED</span>
+  </div>
 </footer>
 
 <script src="js/console.js"></script>
