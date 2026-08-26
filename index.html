@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P2 COMPUTING // ORBITAL CONSOLE</title>
+<meta name="description" content="P2 Computing — station console online. Awaiting directive.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%2330C0B7' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23EE227D'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="stars" aria-hidden="true"></div>
+<div class="crt" aria-hidden="true"></div>
+
+<header class="masthead panel-cut">
+  <div class="mast-left">
+    <span class="led" aria-hidden="true"></span>
+    <h1 class="logo">P2<span class="logo-sep">//</span>COMPUTING</h1>
+  </div>
+  <div class="mast-right mono">
+    <span id="stardate">SD 0000.00</span>
+    <span class="mast-div">|</span>
+    <span id="met">MET 000:00:00</span>
+    <span class="mast-div">|</span>
+    <span class="ok">LINK OK</span>
+  </div>
+</header>
+
+<main class="deck">
+
+  <section class="panel panel-cut span2" id="boot-panel" aria-label="Main terminal">
+    <h2 class="band band-teal">MU/9000 &mdash; MAIN TERMINAL</h2>
+    <pre id="bootlog" class="bootlog mono" aria-live="polite"></pre>
+    <form id="cmdform" class="cmdline" autocomplete="off">
+      <label for="cmd" class="prompt mono">&gt;</label>
+      <input id="cmd" class="mono" type="text" spellcheck="false"
+             aria-label="Console command" placeholder="TYPE HELP">
+    </form>
+  </section>
+
+  <section class="panel panel-cut" aria-label="Systems">
+    <h2 class="band band-pink">SYSTEMS</h2>
+    <ul class="gauges mono">
+      <li><span class="glabel">POWER</span><span class="gtrack"><span class="gfill g-teal" style="--v:92%"></span></span><span class="gval">92%</span></li>
+      <li><span class="glabel">LIFE SUP</span><span class="gtrack"><span class="gfill g-steel" style="--v:100%"></span></span><span class="gval">100%</span></li>
+      <li><span class="glabel">COMMS</span><span class="gtrack"><span class="gfill g-pink" style="--v:78%"></span></span><span class="gval">78%</span></li>
+      <li><span class="glabel">GRAV RING</span><span class="gtrack"><span class="gfill g-salmon" style="--v:66%"></span></span><span class="gval">66%</span></li>
+      <li><span class="glabel">SHIELDS</span><span class="gtrack"><span class="gfill g-plum" style="--v:84%"></span></span><span class="gval">84%</span></li>
+    </ul>
+    <div class="stripe mono" role="note">AUTHORIZED CREW ONLY</div>
+  </section>
+
+  <section class="panel panel-cut" aria-label="Navigation">
+    <h2 class="band band-steel">NAV / SCOPE</h2>
+    <svg class="radar" viewBox="0 0 200 200" role="img" aria-label="Radar scope">
+      <defs>
+        <radialGradient id="scopebg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#3b0855" stop-opacity=".55"/>
+          <stop offset="100%" stop-color="#000" stop-opacity=".9"/>
+        </radialGradient>
+        <linearGradient id="sweepg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#30C0B7" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#30C0B7" stop-opacity=".45"/>
+        </linearGradient>
+      </defs>
+      <circle cx="100" cy="100" r="96" fill="url(#scopebg)" stroke="#498099" stroke-width="1.5"/>
+      <circle cx="100" cy="100" r="64" fill="none" stroke="#498099" stroke-opacity=".5"/>
+      <circle cx="100" cy="100" r="32" fill="none" stroke="#498099" stroke-opacity=".5"/>
+      <line x1="100" y1="4" x2="100" y2="196" stroke="#498099" stroke-opacity=".35"/>
+      <line x1="4" y1="100" x2="196" y2="100" stroke="#498099" stroke-opacity=".35"/>
+      <g class="sweep">
+        <path d="M100,100 L100,4 A96,96 0 0 1 148,17 Z" fill="url(#sweepg)"/>
+      </g>
+      <circle class="blip" cx="142" cy="66" r="3" fill="#EE227D"/>
+      <circle class="blip blip2" cx="70" cy="128" r="3" fill="#FD8083"/>
+      <circle cx="100" cy="100" r="3" fill="#30C0B7"/>
+    </svg>
+    <p class="readout mono">CONTACTS: 2 &middot; DRIFT: 0.03 AU &middot; HDG 227.4</p>
+  </section>
+
+  <section class="panel panel-cut" aria-label="Telemetry">
+    <h2 class="band band-salmon">TELEMETRY</h2>
+    <svg class="wave" viewBox="0 0 300 80" preserveAspectRatio="none" role="img" aria-label="Signal waveform">
+      <path id="wavepath" fill="none" stroke="#30C0B7" stroke-width="2"
+            d="M0,40 L300,40"/>
+      <path id="wavepath2" fill="none" stroke="#EE227D" stroke-width="1" stroke-opacity=".6"
+            d="M0,40 L300,40"/>
+    </svg>
+    <div class="tele mono">
+      <span>CORE <b id="t-core" class="ok">641K</b></span>
+      <span>FLUX <b id="t-flux" class="warn">1.21</b></span>
+      <span>O2 <b id="t-o2" class="ok">20.9%</b></span>
+      <span>HULL <b class="ok">NOMINAL</b></span>
+    </div>
+  </section>
+
+  <section class="panel panel-cut" aria-label="Communications log">
+    <h2 class="band band-plum">COMMS LOG</h2>
+    <ul id="commslog" class="comms mono"></ul>
+  </section>
+
+  <section class="panel panel-cut" aria-label="Directive">
+    <h2 class="band band-teal">DIRECTIVE</h2>
+    <div class="directive mono">
+      <p class="big-status">MODULE UNASSIGNED</p>
+      <p>THIS CONSOLE IS RESERVED FOR A FUTURE<br>P2 COMPUTING OPERATION.</p>
+      <p class="dim">STANDBY&hellip; <span class="cursor" aria-hidden="true">&#9608;</span></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="mono">
+  <span>P2 COMPUTING &middot; DEEP ORBIT FACILITY</span>
+  <span class="dim">MU/9000 REV 2.6 &middot; ALL SYSTEMS MONITORED</span>
+</footer>
+
+<script src="js/console.js"></script>
+</body>
+</html>

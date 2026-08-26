@@ -1,0 +1,366 @@
+/* ── P2 Computing — orbital console ─────────────────────────────
+   Palette (fixed): void #000, deep #3b0855, plum #852467,
+   salmon #FD8083, pink #EE227D, steel #498099, teal #30C0B7   */
+
+:root {
+  --void:   #000000;
+  --deep:   #3b0855;
+  --plum:   #852467;
+  --salmon: #FD8083;
+  --pink:   #EE227D;
+  --steel:  #498099;
+  --teal:   #30C0B7;
+
+  --panel-bg: rgba(59, 8, 85, 0.22);
+  --panel-edge: rgba(133, 36, 103, 0.85);
+  --text: var(--teal);
+  --cut: 14px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { background: var(--void); }
+
+body {
+  min-height: 100vh;
+  color: var(--text);
+  font-family: "Share Tech Mono", ui-monospace, Consolas, monospace;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(59,8,85,.75), transparent 60%),
+    radial-gradient(ellipse 90% 60% at 85% 110%, rgba(73,128,153,.28), transparent 65%),
+    var(--void);
+  overflow-x: hidden;
+}
+
+.mono { font-family: "Share Tech Mono", ui-monospace, Consolas, monospace; }
+
+/* ── backdrop: stars + CRT texture (static, nothing strobes) ── */
+
+.stars, .crt {
+  position: fixed; inset: 0; pointer-events: none;
+}
+
+.stars {
+  z-index: -1;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(253,128,131,.9), transparent 100%),
+    radial-gradient(1px 1px at 78% 8%,  rgba(48,192,183,.9), transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 32%, rgba(255,255,255,.7), transparent 100%),
+    radial-gradient(1px 1px at 32% 64%, rgba(73,128,153,.9), transparent 100%),
+    radial-gradient(1.5px 1.5px at 90% 55%, rgba(238,34,125,.8), transparent 100%),
+    radial-gradient(1px 1px at 8% 88%,  rgba(255,255,255,.55), transparent 100%),
+    radial-gradient(1px 1px at 66% 82%, rgba(253,128,131,.8), transparent 100%),
+    radial-gradient(1.5px 1.5px at 42% 6%, rgba(73,128,153,.85), transparent 100%),
+    radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,.5), transparent 100%),
+    radial-gradient(1px 1px at 84% 30%, rgba(48,192,183,.7), transparent 100%);
+  animation: starDrift 240s linear infinite;
+}
+
+@keyframes starDrift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-120px); }
+}
+
+.crt {
+  z-index: 40;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(0,0,0,.16) 0px, rgba(0,0,0,.16) 1px,
+      transparent 1px, transparent 3px),
+    radial-gradient(ellipse 140% 140% at 50% 50%,
+      transparent 60%, rgba(0,0,0,.55) 100%);
+}
+
+/* ── masthead ── */
+
+.masthead {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .5rem 1.5rem;
+  margin: 1.2rem clamp(.8rem, 3vw, 2.5rem) 0;
+  padding: .7rem 1.3rem;
+  border: 1px solid var(--panel-edge);
+  background: linear-gradient(90deg, rgba(59,8,85,.55), rgba(0,0,0,.6) 55%, rgba(73,128,153,.25));
+}
+
+.mast-left { display: flex; align-items: center; gap: .8rem; }
+
+.logo {
+  font-family: "Orbitron", "Share Tech Mono", sans-serif;
+  font-weight: 900;
+  font-size: clamp(1.2rem, 3.5vw, 1.9rem);
+  letter-spacing: .18em;
+  color: #fff;
+  text-shadow:
+    0 0 6px var(--pink),
+    0 0 18px var(--pink),
+    0 0 42px rgba(238,34,125,.55);
+}
+
+.logo-sep { color: var(--teal); text-shadow: 0 0 8px var(--teal), 0 0 22px var(--teal); }
+
+.led {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 8px var(--teal), 0 0 18px var(--teal);
+  animation: ledBreathe 4s ease-in-out infinite;
+}
+
+/* gentle breathe, never a blink: 4s period, small swing */
+@keyframes ledBreathe {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .55; }
+}
+
+@media (max-width: 480px) {
+  .logo { letter-spacing: .08em; font-size: 1.15rem; }
+  .masthead { padding: .7rem .8rem; }
+}
+
+.mast-right { font-size: .85rem; color: var(--steel); letter-spacing: .08em; }
+.mast-div { margin: 0 .55rem; color: var(--plum); }
+
+/* ── deck / panels ── */
+
+.deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 1.1rem;
+  padding: 1.2rem clamp(.8rem, 3vw, 2.5rem) 1.6rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.span2 { grid-column: span 2; }
+@media (max-width: 720px) { .span2 { grid-column: span 1; } }
+
+.panel {
+  border: 1px solid var(--panel-edge);
+  background: linear-gradient(160deg, var(--panel-bg), rgba(0,0,0,.72) 70%);
+  box-shadow:
+    inset 0 0 24px rgba(59,8,85,.5),
+    0 0 14px rgba(133,36,103,.35);
+  display: flex; flex-direction: column;
+  min-height: 220px;
+}
+
+.panel-cut {
+  clip-path: polygon(
+    var(--cut) 0, 100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0 100%, 0 var(--cut));
+}
+
+/* title bands — every panel wears one */
+.band {
+  font-family: "Orbitron", sans-serif;
+  font-weight: 700;
+  font-size: .78rem;
+  letter-spacing: .32em;
+  padding: .45rem .9rem .4rem 1.4rem;
+  color: var(--void);
+}
+.band-teal   { background: linear-gradient(90deg, var(--teal), rgba(48,192,183,.15)); text-shadow: 0 0 6px rgba(255,255,255,.5); }
+.band-pink   { background: linear-gradient(90deg, var(--pink), rgba(238,34,125,.15)); color: #fff; }
+.band-steel  { background: linear-gradient(90deg, var(--steel), rgba(73,128,153,.15)); color: #fff; }
+.band-salmon { background: linear-gradient(90deg, var(--salmon), rgba(253,128,131,.15)); }
+.band-plum   { background: linear-gradient(90deg, var(--plum), rgba(133,36,103,.15)); color: #fff; }
+
+/* ── main terminal ── */
+
+.bootlog {
+  flex: 1;
+  padding: 1rem 1.2rem .4rem;
+  font-size: .88rem;
+  line-height: 1.55;
+  color: var(--teal);
+  text-shadow: 0 0 4px rgba(48,192,183,.7);
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 12.5em;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.bootlog .sys  { color: var(--steel); }
+.bootlog .warn { color: var(--salmon); }
+.bootlog .err  { color: var(--pink); }
+
+.cmdline {
+  display: flex; align-items: center; gap: .6rem;
+  border-top: 1px solid rgba(73,128,153,.4);
+  padding: .55rem 1.2rem;
+}
+
+.prompt { color: var(--pink); text-shadow: 0 0 6px var(--pink); }
+
+#cmd {
+  flex: 1;
+  background: transparent;
+  border: none; outline: none;
+  color: var(--teal);
+  font-size: .95rem;
+  letter-spacing: .05em;
+  text-shadow: 0 0 4px rgba(48,192,183,.7);
+  text-transform: uppercase;
+  caret-color: var(--pink);
+}
+#cmd::placeholder { color: rgba(73,128,153,.55); }
+
+/* ── systems gauges ── */
+
+.gauges { list-style: none; padding: 1rem 1.1rem; flex: 1; }
+
+.gauges li {
+  display: grid;
+  grid-template-columns: 6.2em 1fr 3.2em;
+  align-items: center;
+  gap: .7em;
+  margin-bottom: .85em;
+  font-size: .82rem;
+  letter-spacing: .08em;
+}
+
+.glabel { color: var(--steel); }
+.gval   { text-align: right; color: var(--salmon); }
+
+.gtrack {
+  height: 10px;
+  background: rgba(0,0,0,.6);
+  border: 1px solid rgba(73,128,153,.45);
+  overflow: hidden;
+}
+
+.gfill {
+  display: block; height: 100%; width: var(--v);
+  background-image: repeating-linear-gradient(90deg,
+    currentColor 0 6px, transparent 6px 9px);
+}
+
+.g-teal   { color: var(--teal);   box-shadow: 0 0 8px var(--teal); }
+.g-steel  { color: var(--steel);  box-shadow: 0 0 8px var(--steel); }
+.g-pink   { color: var(--pink);   box-shadow: 0 0 8px var(--pink); }
+.g-salmon { color: var(--salmon); box-shadow: 0 0 8px var(--salmon); }
+.g-plum   { color: var(--plum);   box-shadow: 0 0 8px var(--plum); }
+
+.stripe {
+  margin-top: auto;
+  padding: .4rem;
+  text-align: center;
+  font-size: .72rem;
+  letter-spacing: .3em;
+  color: #fff;
+  background: repeating-linear-gradient(-45deg,
+    rgba(238,34,125,.85) 0 14px, rgba(0,0,0,.85) 14px 28px);
+  text-shadow: 0 0 4px #000, 0 1px 2px #000;
+}
+
+/* ── radar ── */
+
+.radar { width: min(240px, 70%); margin: 1rem auto .4rem; display: block;
+         filter: drop-shadow(0 0 10px rgba(48,192,183,.35)); }
+
+.sweep { transform-origin: 100px 100px; animation: sweep 6s linear infinite; }
+@keyframes sweep { to { transform: rotate(360deg); } }
+
+/* blips breathe slowly — no blinking */
+.blip  { animation: blipBreathe 5s ease-in-out infinite; }
+.blip2 { animation-delay: -2.5s; }
+@keyframes blipBreathe {
+  0%, 100% { opacity: .95; }
+  50%      { opacity: .35; }
+}
+
+.readout { text-align: center; font-size: .78rem; color: var(--steel);
+           letter-spacing: .1em; padding-bottom: 1rem; }
+
+/* ── telemetry ── */
+
+.wave {
+  width: 100%; height: 90px;
+  margin-top: .8rem;
+  filter: drop-shadow(0 0 6px rgba(48,192,183,.5));
+}
+
+.tele {
+  display: flex; flex-wrap: wrap; justify-content: space-around;
+  gap: .5rem 1rem;
+  padding: .8rem 1rem 1.1rem;
+  font-size: .82rem; letter-spacing: .08em;
+  color: var(--steel);
+}
+.tele b { font-weight: 400; margin-left: .35em; }
+
+.ok   { color: var(--teal);   text-shadow: 0 0 6px rgba(48,192,183,.8); }
+.warn { color: var(--salmon); text-shadow: 0 0 6px rgba(253,128,131,.8); }
+
+/* ── comms ── */
+
+.comms {
+  list-style: none;
+  padding: .9rem 1.1rem;
+  font-size: .8rem;
+  line-height: 1.6;
+  flex: 1;
+  overflow-y: auto;
+  max-height: 240px;
+}
+
+.comms .t { color: var(--plum); margin-right: .6em; }
+.comms .from { color: var(--pink); margin-right: .6em; }
+
+/* ── directive ── */
+
+.directive {
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: .9rem;
+  text-align: center;
+  padding: 1.2rem;
+  font-size: .82rem;
+  letter-spacing: .12em;
+  line-height: 1.7;
+  color: var(--steel);
+}
+
+.big-status {
+  font-family: "Orbitron", sans-serif;
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: .22em;
+  color: var(--salmon);
+  text-shadow: 0 0 8px var(--salmon), 0 0 26px rgba(253,128,131,.5);
+}
+
+.dim { color: rgba(73,128,153,.75); }
+
+.cursor {
+  color: var(--teal);
+  animation: cursorBreathe 1.6s ease-in-out infinite;
+}
+@keyframes cursorBreathe {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .15; }
+}
+
+/* ── footer ── */
+
+footer {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: .4rem 1.5rem;
+  padding: .8rem clamp(.8rem, 3vw, 2.5rem) 1.4rem;
+  font-size: .72rem;
+  letter-spacing: .18em;
+  color: var(--plum);
+}
+
+/* ── scrollbars, selection ── */
+
+::selection { background: var(--pink); color: #000; }
+
+* { scrollbar-width: thin; scrollbar-color: var(--plum) transparent; }
+
+/* ── motion safety: everything stills, nothing lost ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .stars, .sweep, .blip, .led, .cursor { animation: none; }
+}
