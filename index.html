@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>P2 COMPUTING // ORBITAL CONSOLE</title>
-<meta name="description" content="P2 Computing — station console online. Awaiting directive.">
+<title>P2 COMPUTING // FLIGHT DECK</title>
+<meta name="description" content="P2 Computing — flight deck online. Planet ahead. Awaiting directive.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%2330C0B7' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23EE227D'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,167 +13,213 @@
 </head>
 <body>
 
-<div class="stars" aria-hidden="true"></div>
 <div class="crt" aria-hidden="true"></div>
 
-<header class="masthead">
-  <div class="mast-left">
-    <span class="led" aria-hidden="true"></span>
+<div class="cockpit">
+
+  <!-- ── top frame: marquee panels either side of the wordmark ── -->
+  <header class="topframe">
+    <div class="tf-plate mono" aria-hidden="true">
+      <span class="lamp on"></span><span class="lamp amber on"></span><span class="lamp pink"></span>
+    </div>
+    <div class="tf-screen mono" id="ticker">ORBITAL INSERTION COMPLETE</div>
     <h1 class="logo">P2<span class="logo-sep">//</span>COMPUTING</h1>
-  </div>
-  <div class="mast-right mono">
-    <span id="stardate">SD 0000.00</span>
-    <span class="mast-div">|</span>
-    <span id="met">MET 000:00:00</span>
-    <span class="mast-div">|</span>
-    <span class="ok">LINK OK</span>
-  </div>
-  <div class="strip strip-pink" aria-hidden="true"></div>
-</header>
+    <div class="tf-screen mono"><span id="stardate">SD 0000.000</span> &nbsp;<span id="met">MET 000:00:00</span></div>
+    <div class="tf-plate mono" aria-hidden="true">
+      <span class="lamp pink"></span><span class="lamp amber on"></span><span class="lamp on"></span>
+    </div>
+  </header>
 
-<main class="deck">
-
-  <!-- forward viewport: synthwave sun over the grid -->
-  <section class="panel full viewport-panel" aria-label="Forward viewport">
-    <div class="vp-frame">
-      <div class="vp-scene" aria-hidden="true">
-        <div class="vp-sky"></div>
-        <div class="vp-sun"></div>
-        <div class="vp-haze"></div>
-        <div class="vp-grid"></div>
-        <div class="vp-glass"></div>
+  <!-- ── the glass ──────────────────────────────────────────── -->
+  <section class="viewport" id="viewport" aria-label="Forward viewport — planet ahead">
+    <div class="space" aria-hidden="true">
+      <div class="starfield sf1" id="sf1"></div>
+      <div class="starfield sf2" id="sf2"></div>
+      <div class="planet">
+        <div class="lights"></div>
+        <div class="clouds"></div>
+        <div class="shade"></div>
+        <div class="planet-grid" id="pgrid" hidden></div>
       </div>
-      <div class="vp-tag mono">FWD VIEWPORT &middot; SECTOR 7G &middot; MAG 1.0</div>
-      <span class="screw s-tl" aria-hidden="true"></span><span class="screw s-tr" aria-hidden="true"></span>
-      <span class="screw s-bl" aria-hidden="true"></span><span class="screw s-br" aria-hidden="true"></span>
+      <div class="atmo"></div>
     </div>
-  </section>
 
-  <section class="panel panel-cut span2" id="boot-panel" aria-label="Main terminal">
-    <h2 class="band band-teal">MU/9000 &mdash; MAIN TERMINAL</h2>
-    <pre id="bootlog" class="bootlog mono" aria-live="polite"></pre>
-    <form id="cmdform" class="cmdline" autocomplete="off">
-      <label for="cmd" class="prompt mono">&gt;</label>
-      <input id="cmd" class="mono" type="text" spellcheck="false"
-             aria-label="Console command" placeholder="TYPE HELP">
-    </form>
-  </section>
+    <div class="hud" id="hud">
+      <span class="hud-corner c-tl" aria-hidden="true"></span>
+      <span class="hud-corner c-tr" aria-hidden="true"></span>
+      <span class="hud-corner c-bl" aria-hidden="true"></span>
+      <span class="hud-corner c-br" aria-hidden="true"></span>
 
-  <section class="panel panel-cut" aria-label="Systems">
-    <h2 class="band band-pink">SYSTEMS</h2>
-    <ul class="gauges mono">
-      <li><span class="glabel">POWER</span><span class="gtrack"><span class="gfill g-teal" style="--v:92%"></span></span><span class="gval">92%</span></li>
-      <li><span class="glabel">LIFE SUP</span><span class="gtrack"><span class="gfill g-steel" style="--v:100%"></span></span><span class="gval">100%</span></li>
-      <li><span class="glabel">COMMS</span><span class="gtrack"><span class="gfill g-pink" style="--v:78%"></span></span><span class="gval">78%</span></li>
-      <li><span class="glabel">GRAV RING</span><span class="gtrack"><span class="gfill g-salmon" style="--v:66%"></span></span><span class="gval">66%</span></li>
-      <li><span class="glabel">SHIELDS</span><span class="gtrack"><span class="gfill g-plum" style="--v:84%"></span></span><span class="gval">84%</span></li>
-    </ul>
-    <div class="stripe mono" role="note">AUTHORIZED CREW ONLY</div>
-  </section>
+      <div class="crosshair" id="crosshair" aria-hidden="true"><i></i></div>
 
-  <section class="panel panel-cut" aria-label="Navigation">
-    <h2 class="band band-steel">NAV / SCOPE</h2>
-    <svg class="radar" viewBox="0 0 200 200" role="img" aria-label="Radar scope">
-      <defs>
-        <radialGradient id="scopebg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#3b0855" stop-opacity=".55"/>
-          <stop offset="100%" stop-color="#000" stop-opacity=".9"/>
-        </radialGradient>
-        <linearGradient id="sweepg" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#30C0B7" stop-opacity="0"/>
-          <stop offset="100%" stop-color="#30C0B7" stop-opacity=".45"/>
-        </linearGradient>
-      </defs>
-      <circle cx="100" cy="100" r="96" fill="url(#scopebg)" stroke="#498099" stroke-width="1.5"/>
-      <circle cx="100" cy="100" r="64" fill="none" stroke="#498099" stroke-opacity=".5"/>
-      <circle cx="100" cy="100" r="32" fill="none" stroke="#498099" stroke-opacity=".5"/>
-      <line x1="100" y1="4" x2="100" y2="196" stroke="#498099" stroke-opacity=".35"/>
-      <line x1="4" y1="100" x2="196" y2="100" stroke="#498099" stroke-opacity=".35"/>
-      <g class="sweep">
-        <path d="M100,100 L100,4 A96,96 0 0 1 148,17 Z" fill="url(#sweepg)"/>
-      </g>
-      <circle class="blip" cx="142" cy="66" r="3" fill="#EE227D"/>
-      <circle class="blip blip2" cx="70" cy="128" r="3" fill="#FD8083"/>
-      <circle cx="100" cy="100" r="3" fill="#30C0B7"/>
-    </svg>
-    <p class="readout mono">CONTACTS: 2 &middot; DRIFT: 0.03 AU &middot; HDG 227.4</p>
-  </section>
+      <button class="reticle" id="ret1" type="button" aria-label="Tracked contact TGT-01">
+        <span class="ret-ring" aria-hidden="true"></span>
+        <span class="ret-inner" aria-hidden="true"></span>
+        <span class="ret-id mono">TGT-01</span>
+      </button>
+      <button class="reticle ret-b" id="ret2" type="button" aria-label="Tracked contact TGT-02">
+        <span class="ret-ring" aria-hidden="true"></span>
+        <span class="ret-inner" aria-hidden="true"></span>
+        <span class="ret-id mono">TGT-02</span>
+      </button>
 
-  <section class="panel panel-cut" aria-label="Telemetry">
-    <h2 class="band band-salmon">TELEMETRY</h2>
-    <div class="tele-row">
-      <svg class="dial" viewBox="0 0 100 100" role="img" aria-label="Reactor output dial">
-        <circle cx="50" cy="50" r="46" fill="rgba(0,0,0,.55)" stroke="#498099" stroke-width="1.5"/>
-        <g class="ticks" stroke="#498099" stroke-width="2">
-          <line x1="50" y1="8" x2="50" y2="16"/>
-          <line x1="14" y1="71" x2="21" y2="67"/>
-          <line x1="86" y1="71" x2="79" y2="67"/>
-          <line x1="20" y1="29" x2="26" y2="34"/>
-          <line x1="80" y1="29" x2="74" y2="34"/>
-        </g>
-        <path d="M26,80 A38,38 0 0 1 20,66" fill="none" stroke="#EE227D" stroke-width="4"/>
-        <g class="needle">
-          <line x1="50" y1="50" x2="50" y2="14" stroke="#FD8083" stroke-width="2.5"/>
-        </g>
-        <circle cx="50" cy="50" r="4" fill="#EE227D"/>
-        <text x="50" y="92" text-anchor="middle" fill="#498099" font-size="9" font-family="inherit">OUTPUT</text>
-      </svg>
-      <svg class="wave" viewBox="0 0 300 80" preserveAspectRatio="none" role="img" aria-label="Signal waveform">
-        <path id="wavepath" fill="none" stroke="#30C0B7" stroke-width="2" d="M0,40 L300,40"/>
-        <path id="wavepath2" fill="none" stroke="#EE227D" stroke-width="1" stroke-opacity=".6" d="M0,40 L300,40"/>
-      </svg>
-    </div>
-    <div class="tele mono">
-      <span>CORE <b id="t-core" class="ok">641K</b></span>
-      <span>FLUX <b id="t-flux" class="warn">1.21</b></span>
-      <span>O2 <b id="t-o2" class="ok">20.9%</b></span>
-      <span>HULL <b class="ok">NOMINAL</b></span>
-    </div>
-  </section>
+      <div class="hud-data hd-tl mono">ALT <b id="h-alt">412.4</b> KM<br>VEL <b id="h-vel">7.66</b> KM/S<br>INC <b>51.6&deg;</b></div>
+      <div class="hud-data hd-tr mono">LAT <b id="h-lat">+33.71</b><br>LON <b id="h-lon">-112.08</b><br>SIG <b id="h-sig">-41</b> DB</div>
+      <div class="hud-data hd-bl mono">ATMOS O2 20.9 &middot; N2 78.1<br>SURFACE 288K &middot; CLEAR</div>
+      <div class="hud-data hd-br mono" id="h-scan">SCAN IDLE</div>
 
-  <section class="panel panel-cut" aria-label="Communications log">
-    <h2 class="band band-plum">COMMS LOG</h2>
-    <ul id="commslog" class="comms mono"></ul>
-  </section>
-
-  <section class="panel panel-cut" aria-label="Directive">
-    <h2 class="band band-teal">DIRECTIVE</h2>
-    <div class="directive mono">
-      <p class="big-status">MODULE UNASSIGNED</p>
-      <p>THIS CONSOLE IS RESERVED FOR A FUTURE<br>P2 COMPUTING OPERATION.</p>
-      <p class="dim">STANDBY&hellip; <span class="cursor" aria-hidden="true">&#9608;</span></p>
-    </div>
-  </section>
-
-  <!-- control bank: rows of lit keys, sliders, one guarded switch -->
-  <section class="panel panel-cut full" aria-label="Control bank">
-    <h2 class="band band-steel">CONTROL BANK B</h2>
-    <div class="bank">
-      <div id="keybank" class="keybank" role="group" aria-label="Toggle keys"></div>
-      <div class="faders" aria-hidden="true">
-        <div class="fader"><span class="fknob" style="--y:18%"></span></div>
-        <div class="fader"><span class="fknob fk-pink" style="--y:52%"></span></div>
-        <div class="fader"><span class="fknob fk-salmon" style="--y:34%"></span></div>
-      </div>
-      <div class="master">
-        <button id="master" class="master-btn mono" type="button">
-          <span class="master-cap" aria-hidden="true"></span>
-          JETTISON
-        </button>
-        <span class="master-note mono">GUARDED</span>
+      <div class="target-card mono" id="tcard" hidden>
+        <button class="tcard-x" id="tcard-x" type="button" aria-label="Close">&times;</button>
+        <h3 class="mono" id="tc-name">TGT-01</h3>
+        <p id="tc-body">&mdash;</p>
       </div>
     </div>
+
+    <!-- window struts with indicator lamps -->
+    <div class="strut strut-l">
+      <button class="ind" type="button" data-ind="NAV"  data-on="1"><span class="lamp on"></span><span class="ind-lbl mono">NAV</span></button>
+      <button class="ind" type="button" data-ind="CAB"  data-on="1"><span class="lamp amber on"></span><span class="ind-lbl mono">CAB</span></button>
+      <button class="ind" type="button" data-ind="CAUT" id="ind-caut"><span class="lamp pink"></span><span class="ind-lbl mono">CAUT</span></button>
+    </div>
+    <div class="strut strut-r">
+      <button class="ind" type="button" data-ind="DCK"><span class="lamp"></span><span class="ind-lbl mono">DCK</span></button>
+      <button class="ind" type="button" data-ind="SCN"  data-on="1"><span class="lamp on"></span><span class="ind-lbl mono">SCN</span></button>
+      <button class="ind" type="button" data-ind="COM"  data-on="1"><span class="lamp amber on"></span><span class="ind-lbl mono">COM</span></button>
+    </div>
   </section>
 
-</main>
+  <div class="caution mono" id="caution" hidden>&#9650; MASTER CAUTION &mdash; RESET ON RIGHT CONSOLE &#9650;</div>
 
-<footer class="mono">
-  <div class="strip strip-teal" aria-hidden="true"></div>
-  <div class="foot-row">
+  <!-- ── the console ────────────────────────────────────────── -->
+  <section class="console">
+
+    <div class="cluster">
+      <div class="screen mono">
+        <h2 class="screen-title">SYSTEMS</h2>
+        <ul class="sysbars" id="sysbars"></ul>
+        <p class="screen-foot" id="sysfoot">BUS LOAD &mdash;</p>
+      </div>
+      <div class="matrix" id="matrix-l" role="group" aria-label="Left switch matrix"></div>
+      <div class="switchbank" id="switch-l" role="group" aria-label="Left toggles"></div>
+    </div>
+
+    <div class="cluster center">
+      <div class="centert">
+        <div class="dialbox">
+          <button class="dial" id="dial-l" type="button" aria-label="Left gauge — press to cycle">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="50" r="46" class="dial-face"/>
+              <g class="dial-ticks">
+                <line x1="50" y1="8"  x2="50" y2="15"/><line x1="14" y1="71" x2="20" y2="67"/>
+                <line x1="86" y1="71" x2="80" y2="67"/><line x1="20" y1="29" x2="25" y2="33"/>
+                <line x1="80" y1="29" x2="75" y2="33"/>
+              </g>
+              <path d="M26,80 A38,38 0 0 1 20,66" class="dial-red"/>
+              <g class="needle" id="needle-l"><line x1="50" y1="50" x2="50" y2="14"/></g>
+              <circle cx="50" cy="50" r="4" class="dial-cap"/>
+            </svg>
+            <span class="dial-label mono" id="dlbl-l">FUEL</span>
+            <span class="dial-val mono" id="dval-l">72</span>
+          </button>
+        </div>
+
+        <div class="screen main">
+          <h2 class="screen-title">MU/9000 &mdash; MAIN TERMINAL</h2>
+          <pre id="bootlog" class="bootlog mono" aria-live="polite"></pre>
+          <div class="commsline mono" id="commsline">&nbsp;</div>
+          <form id="cmdform" class="cmdline" autocomplete="off">
+            <label for="cmd" class="prompt mono">&gt;</label>
+            <input id="cmd" class="mono" type="text" spellcheck="false" aria-label="Console command" placeholder="TYPE HELP">
+          </form>
+        </div>
+
+        <div class="dialbox">
+          <button class="dial" id="dial-r" type="button" aria-label="Right gauge — press to cycle">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="50" r="46" class="dial-face"/>
+              <g class="dial-ticks">
+                <line x1="50" y1="8"  x2="50" y2="15"/><line x1="14" y1="71" x2="20" y2="67"/>
+                <line x1="86" y1="71" x2="80" y2="67"/><line x1="20" y1="29" x2="25" y2="33"/>
+                <line x1="80" y1="29" x2="75" y2="33"/>
+              </g>
+              <path d="M26,80 A38,38 0 0 1 20,66" class="dial-red"/>
+              <g class="needle" id="needle-r"><line x1="50" y1="50" x2="50" y2="14"/></g>
+              <circle cx="50" cy="50" r="4" class="dial-cap"/>
+            </svg>
+            <span class="dial-label mono" id="dlbl-r">O2</span>
+            <span class="dial-val mono" id="dval-r">88</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="centerb">
+        <div class="joystick" id="joy-l" aria-label="Attitude stick — drag">
+          <div class="stick" id="stick-l"><span class="ball"></span></div>
+          <div class="joybase"></div>
+        </div>
+
+        <div class="keypad" role="group" aria-label="Code keypad">
+          <div class="pad-readout mono" id="padout">&ndash;&ndash;&ndash;&ndash;</div>
+          <div class="pad-keys mono" id="padkeys"></div>
+        </div>
+
+        <div class="throttle mono">
+          <span class="thr-lbl">THR</span>
+          <div class="thr-body">
+            <div class="engbar" aria-hidden="true"><span id="engfill"></span></div>
+            <input type="range" id="thr" min="0" max="100" value="18" aria-label="Main engine throttle">
+          </div>
+          <span class="thr-val" id="thrval">18%</span>
+        </div>
+
+        <div class="joystick" id="joy-r" aria-label="Translation stick — drag">
+          <div class="stick" id="stick-r"><span class="ball ball-t"></span></div>
+          <div class="joybase"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cluster">
+      <div class="screen mono">
+        <h2 class="screen-title">NAV / SCOPE</h2>
+        <svg class="radar" viewBox="0 0 200 200" role="img" aria-label="Radar scope">
+          <defs>
+            <radialGradient id="scopebg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#3b0855" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#000" stop-opacity=".92"/>
+            </radialGradient>
+            <linearGradient id="sweepg" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#30C0B7" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#30C0B7" stop-opacity=".45"/>
+            </linearGradient>
+          </defs>
+          <circle cx="100" cy="100" r="96" fill="url(#scopebg)" stroke="#498099" stroke-width="1.5"/>
+          <circle cx="100" cy="100" r="64" fill="none" stroke="#498099" stroke-opacity=".45"/>
+          <circle cx="100" cy="100" r="32" fill="none" stroke="#498099" stroke-opacity=".45"/>
+          <line x1="100" y1="4" x2="100" y2="196" stroke="#498099" stroke-opacity=".3"/>
+          <line x1="4" y1="100" x2="196" y2="100" stroke="#498099" stroke-opacity=".3"/>
+          <g class="sweep"><path d="M100,100 L100,4 A96,96 0 0 1 148,17 Z" fill="url(#sweepg)"/></g>
+          <circle class="blip rblip" data-c="1" cx="142" cy="66" r="4" fill="#EE227D"/>
+          <circle class="blip blip2 rblip" data-c="2" cx="70" cy="128" r="4" fill="#FFB03A"/>
+          <circle cx="100" cy="100" r="3" fill="#30C0B7"/>
+        </svg>
+        <p class="screen-foot" id="navfoot">CONTACTS 2 &middot; HDG 227.4 &middot; DRIFT 0.03 AU</p>
+      </div>
+      <div class="matrix amber" id="matrix-r" role="group" aria-label="Right switch matrix"></div>
+      <div class="switchbank" id="switch-r" role="group" aria-label="Right toggles"></div>
+      <div class="masterrow">
+        <button class="bigbtn amberb mono" id="cautionbtn" type="button">CAUTION<br>RESET</button>
+        <button class="bigbtn pinkb mono" id="master" type="button"><span class="guard" aria-hidden="true"></span>JETTISON</button>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="mono">
     <span>P2 COMPUTING &middot; DEEP ORBIT FACILITY</span>
-    <span class="dim">MU/9000 REV 2.6 &middot; ALL SYSTEMS MONITORED</span>
-  </div>
-</footer>
+    <span class="dim">MU/9000 REV 3.0 &middot; ALL SYSTEMS MONITORED</span>
+  </footer>
+</div>
 
 <script src="js/console.js"></script>
 </body>
